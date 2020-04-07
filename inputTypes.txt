@@ -1,0 +1,8 @@
+## Various Input Types ~ Need to auto generate forms based on.
+
+freeForm
+mass
+length
+yes or no
+Categoric...
+Password

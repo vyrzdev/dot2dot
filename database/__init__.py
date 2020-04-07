@@ -1,5 +1,5 @@
 import mongoengine
-from config import config
+from ..config import config
 from . import models, stockHandler
 # APIHandler
 
