@@ -1,15 +1,20 @@
 import validator_collection
 from flask import Markup
-# TODO: Actually display errors
+# TODO: Actually display errors, in render.
+# Data Flow: User Makes Error -> Error Logged -> Error added to form object -> Applicable error added to field objects -> Form Rendered with errors.
 
 
+# Base Field class. In usage simply is a text-input.
 class Field:
-    def __init__(self, name, validators=[], label=None, errorMsg="", required=False):
+    def __init__(self, name, validators=[], label=None, required=False):
+        # Label is displayed to user, name is the dict key of the response.
+        # Validators are currently actually 'checkers', they return True or False depending on if input meets certain criteria.
+        # We should migrate soon over to validators, with try & except statements... This would enable us to get detailed error
+        # messages.
         if label is None: label = name
         self.name = name
         self.label = label
         self.validators = validators
-        self.errorMsg = errorMsg
         if required: self.validators.append(validator_collection.is_not_empty)
 
     def parseResponse(self, response):
@@ -52,13 +57,14 @@ class Field:
         return Markup(markup)
 
 
+# A large text field input.
+# TODO: Fix this, parseResponse.
 class TextAreaField:
-    def __init__(self, name, label=None, validators=[], errorMsg="", required=False):
+    def __init__(self, name, label=None, validators=[], required=False):
         if label is None: label = name
         self.name = name
         self.label = label
         self.validators = validators
-        self.errorMsg = errorMsg
         if required: self.validators.append(validator_collection.is_not_empty)
 
     def checkInput(self, userInput):
