@@ -24,7 +24,7 @@ class manufacturer(mongoengine.Document):
 
     @property
     def prefix(self):
-        return str(self.iterID).zfill(3)
+        return str(self._id).zfill(3)
 
     def products(self, **kwargs):
         return product.objects(supplier=self, **kwargs)
