@@ -1,0 +1,46 @@
+Well shit.
+
+Seems we are all doomed to be hindered by mistakes from our past.
+
+My (foolish) SKU Structure:
+<3 Digit manufacturer prefix>+<5 Digit product number>
+e.g. 00100001
+
+How are we going to database this?
+Calculating it seems simple, get the manufacturer, get the last added-
+Wait no, because we need to be able to insert SKUs in the middle...
+Do we need to?
+Well yes, initially we will need to be able to.
+But, after initial setup, it should be simple to completely forgo that feature.
+Is it better to have SKUs be rigid and not user editable?
+Okay, so we aren't going to let the user skip SKUs.
+So calculating sku workflow looks sort of like this:
+
+get manufacturer
+get products with this manufacturer in order of datetime added ~ Costly Query
+if none:
+  sku = prefix + 1.zfill whatever
+else:
+  get last added product
+  get SKU
+  strip prefix off of front, using a slice.
+  iterate number up by 1.
+
+Once you have SKU, simply add it to the database.
+
+Do we make sku the products primary key?
+Is it good to have 2 unique identifiers for each product?
+I think it'll be fine, at worst we use an extra few bytes per product.
+This is something for a better developer than me to fix.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ideal SKU Structure:
+<productID>:<prefix>
+
+e.g. 1:1
+
+The colon signifies the separation, the numbers can iterate as much as they'd like.
+No limits.

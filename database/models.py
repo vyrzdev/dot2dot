@@ -26,8 +26,15 @@ class manufacturer(mongoengine.Document):
     def prefix(self):
         return str(self._id).zfill(3)
 
-    def products(self, **kwargs):
-        return product.objects(supplier=self, **kwargs)
+    def nextSKU(self):
+        objects = product.objects(manufacturer=self).order_by("$natural")
+        if objects.count() == 0:
+            return f"{self.prefix}00001"
+        else:
+            lastSKU = objects.first.sku
+            lastID = int(lastSKU[3:])
+            nextID = str(lastID + 1)
+            return f"{self.prefix}{nextID.zfill(5)}"
 
 
 class category(mongoengine.Document):
@@ -45,6 +52,7 @@ class category(mongoengine.Document):
 class product(mongoengine.Document):
     iterID = mongoengine.SequenceField(primary_key=True)
     name = mongoengine.StringField(required=True)
+    sku = mongoengine.StringField(required=True)
     description = mongoengine.StringField()
     productData = mongoengine.DictField()  # A Dict storing productData.
     metaData = mongoengine.DictField()  # A simple dict storing meta like ETSYListingIDs, etc.
@@ -54,10 +62,6 @@ class product(mongoengine.Document):
     # Reference Fields
     supplier = mongoengine.ReferenceField(manufacturer, required=True)
     category = mongoengine.ReferenceField(category, required=True)
-
-    @property
-    def sku(self):
-        return self.supplier.prefix + str(self.iterID).zfill(5)
 
     def stockChanges(self, **kwargs):
         return stockChange.objects(product=self, **kwargs)
