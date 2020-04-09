@@ -1,4 +1,4 @@
-from . import app, models, fields, form
+from . import app, models, form, formschemas
 from flask import request, jsonify, redirect, abort
 
 ##################
@@ -8,10 +8,9 @@ from flask import request, jsonify, redirect, abort
 # Test form generation...
 @app.route("/test", methods=["GET", "POST"])
 def test():
-    form1 = form.Form("/test", "post", fields=[
-        fields.Field("Epic"),
-        fields.SelectField("test", ["op1", "op2", "op3"], label="Test SelectField", required=True)
-    ])
+    form1 = form.Form("/test", "post")
+    print("TRACE!")
+    form1.buildFromSchema()
     if request.method == "POST":
         jsonResponse = form1.parseResponse(request.form)
         return jsonify(jsonResponse)
@@ -27,16 +26,9 @@ def test():
 # Create A Manufacturer
 @app.route("/manufacturer/create", methods=["GET", "POST"])
 def createManufacturer():
-    # Create a new manufacturer object, this is to show the prefix ahead of time?
-    # Potentially unecessary.
-    # No actually, definitely unecessary...
-    # Do I change it?
-    # Nah.
-    newManufacturer = models.manufacturer()
-    # Define the form.
-    createManufacturerForm = form.Form("/manufacturer/create", "post", fields=[
-        fields.Field("name", label="Manufacturer Name", required=True),
-    ])
+    createManufacturerForm = form.Form("/manufacturer/create", "post")
+    createManufacturerForm.buildFromSchema(formschemas.manufacturer.create.Schema)
+
     if request.method == "POST":
         # Get the form data
         response = request.form
@@ -44,17 +36,42 @@ def createManufacturer():
         jsonResponse = createManufacturerForm.parseResponse(response)
         # Get a JSON response. As defined in form.py.
         if jsonResponse["valid"]:
-            newManufacturer.name = jsonResponse["values"]["name"]
+            newManufacturer = models.manufacturer()
             newManufacturer.save()
-            # Send them to the new manufacturer page, iterID is the promary key, and is assigned by sequenceField.
+            newManufacturer.update(**jsonResponse["values"])
+            # Send them to the new manufacturer page, iterID is the primary key, and is assigned by sequenceField.
             return redirect(f"/manufacturer/view/{newManufacturer.iterID}")
         else:
             # Fuck off. How tf did you break this shit?
-            return "Invalid JSON"
+            return str(jsonResponse)
     # Send the forms HTML.
     elif request.method == "GET":
         return createManufacturerForm.render()
     # They using PUT or some shit?!
+    else:
+        return "Invalid Method! This endpoint only supports GET & POST"
+
+
+@app.route("/manufacturer/edit/<objID>", methods=["GET", "POST"])
+def editManufacturer(objID):
+    # Fetch Manufacturer Object, See if it exists.
+    requestedManufacturer = models.manufacturer.objects(iterID=objID).first()
+    if requestedManufacturer is None:
+        abort(404)
+
+    editManufacturerForm = form.Form(f"/manufacturer/edit/{objID}", "post")
+    editManufacturerForm.buildFromSchema(formschemas.manufacturer.edit.Schema)
+    editManufacturerForm.addDefaultValues(requestedManufacturer)
+
+    if request.method == "POST":
+        jsonResponse = editManufacturerForm.parseResponse(request.form)
+        if jsonResponse["valid"]:
+            requestedManufacturer.update(**jsonResponse["values"])
+            return redirect(f"/manufacturer/view/{requestedManufacturer.iterID}")
+        else:
+            return request.form.to_dict()
+    elif request.method == "GET":
+        return editManufacturerForm.render()
     else:
         return "Invalid Method! This endpoint only supports GET & POST"
 
@@ -66,7 +83,7 @@ def viewManufacturer(objID):
     if requestedManufacturer is None:
         abort(404)
     else:
-        return requestedManufacturer.to_json()
+        return jsonify(requestedManufacturer.to_mongo().to_dict())
 
 
 ################

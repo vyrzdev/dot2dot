@@ -1,5 +1,11 @@
-# Take request.form, and orginal formObj, validate Input.
 from flask import Markup
+from . import fields
+
+fieldClassLookup = {
+    "text": fields.Field,
+    "boolean": fields.BooleanField,
+    "select": fields.SelectField
+}
 
 
 class Form:
@@ -19,6 +25,30 @@ class Form:
                 self.fieldObjects.remove(field)
             else:
                 pass
+
+    def addDefaultValues(self, existingObject):
+        objectDict = existingObject.to_mongo().to_dict()
+        for fieldObject in self.fieldObjects:
+            if "__" in fieldObject.name:
+                path = fieldObject.name.split("__")
+                current = objectDict
+                for pathItem in path:
+                    current = current.get(pathItem)
+                fieldObject.value = current
+            else:
+                fieldObject.value = objectDict.get(fieldObject.name)
+
+    def addErrorMessages(self, errorDict):
+        for fieldObject in self.fieldObjects:
+            fieldObject.errorMessage = errorDict.get(fieldObject.name)
+
+    def buildFromSchema(self, Schema):
+        self.fieldObjects = []
+        for fieldName in Schema.keys():
+            details = Schema.get(fieldName)
+            fieldClass = fieldClassLookup.get(details.get("type"))
+            field = fieldClass(fieldName, label=details.get("label"), required=details.get("required"))
+            self.addField(field)
 
     # On parse, we need to check every input, against its validation method, then we need to log if theres an error, return that, along with the parsed input.
     # Errors will be passed as dict: {"name": "ErrorMsg"}
