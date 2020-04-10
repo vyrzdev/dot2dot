@@ -57,3 +57,12 @@ Okay so tasks:
   - Write delete method -> Must be safe.
   - Make necessary changes to category model to build in fieldStore.
   - Modularize fields.py -> Change namings throughout software.
+
+
+~~~~~~
+
+Just to clean up one more loose end...
+Products will store category specific data in a dict called productData.
+This dict will be structured as such:
+
+fieldID: value
