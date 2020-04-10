@@ -5,19 +5,64 @@ from flask import request, jsonify, redirect, abort
 # Testing Routes #
 ##################
 
+
 # Test form generation...
-@app.route("/test", methods=["GET", "POST"])
+@app.route("/test-form-generation", methods=["GET", "POST"])
 def test():
     form1 = form.Form("/test", "post")
-    print("TRACE!")
-    form1.buildFromSchema()
+    Schema = {
+        "name": {
+            "type": "text",
+            "label": "Name",
+            "required": True
+        },
+        "description": {
+            "type": "textarea",
+            "label": "Description",
+            "required": True
+        },
+        "boolean_test": {
+            "type": "boolean",
+            "label": "Boolean Test",
+        },
+        "select_test": {
+            "type": "select",
+            "label": "Select Test",
+            "required": True,
+            "options": ["op1", "op2", "op3"],
+            "allowMultiple": True
+        }
+    }
+    form1.buildFromSchema(Schema)
     if request.method == "POST":
         jsonResponse = form1.parseResponse(request.form)
         return jsonify(jsonResponse)
-    elif request.method == "GET":
-        return form1.render()
     else:
-        return "This Endpoint only supports GET and POST..."
+        return form1.render()
+
+
+@app.route("/test-schema-generation", methods=["GET", "POST"])
+def testSchemaGeneration():
+    fieldList = [models.fieldStore(name="Epic", type="text", details={"label": "Epic",
+                                                                      "required": False}
+                                   ),
+                 models.fieldStore(name="Select Test", type="select", details={"label": "Select Test",
+                                                                               "required": True,
+                                                                               "options": ["op1", "op2", "op3", "op4"],
+                                                                               "allowMultiple": False
+                                                                               }
+                                   )
+                ]
+    Schema = {}
+    for fieldStore in fieldList:
+        Schema = {**Schema, **fieldStore.Schema()}
+    newForm = form.Form("/test-schema-generation", "post")
+    newForm.buildFromSchema(Schema)
+    if request.method == "POST":
+        jsonResponse = newForm.parseResponse(request.form)
+        return jsonify(jsonResponse)
+    else:
+        return newForm.render()
 
 #######################
 # Manufacturer Routes #
