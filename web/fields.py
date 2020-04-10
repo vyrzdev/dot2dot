@@ -1,9 +1,5 @@
 import validator_collection
 from flask import Markup
-# TODO: Actually display errors, in render. ~ In Progress
-# Data Flow: User Makes Error -> Error Logged -> Error added to form object -> Applicable error added to field objects -> Form Rendered with errors.
-
-# TODO: Bring SelectFields and TextAreaField up to date.
 
 
 # Base Field class. In usage simply is a text-input.
@@ -67,16 +63,7 @@ class Field:
 
 
 # A large text field input.
-# TODO: Fix this, parseResponse.
-class TextAreaField:
-    def __init__(self, name, label=None, validators=list(), required=False, value=None):
-        if label is None: label = name
-        self.value = value
-        self.name = name
-        self.label = label
-        self.validators = validators
-        if required: self.validators.append(validator_collection.is_not_empty)
-
+class TextAreaField(Field):
     def render(self):
         conditional = ""
         if self.value is not None:
@@ -84,15 +71,18 @@ class TextAreaField:
         containerClass = "fieldContainer"
         labelClass = "fieldLabel"
         inputClass = "fieldInput"
+        errorClass = "fieldError"
         markup = f'''
             <div class="{containerClass}">
                 <label class="{labelClass}">{self.label}</label>
-                <input type="textarea" class="{inputClass}" name="{self.name}" placeholder="{self.placeholder}" {conditional}>
+                <input type="textarea" class="{inputClass}" name="{self.name}" {conditional}>
+                <p class="{errorClass}">{self.errorMessage}</p>
             </div>
         '''
         return Markup(markup)
 
 
+# A checkbox ~ Returns a boolean value.
 class BooleanField:
     def __init__(self, name, label=None, value=None, required=None):
         self.value = value
@@ -126,16 +116,18 @@ class BooleanField:
         return Markup(markup)
 
 
-# TODO: Migrate to new value system, still on placeholder.
+# A selection field.
+# TODO: Comment me!
 class SelectField:
     def __init__(self, name, options, label=None, required=False, allowMultiple=False, value=None):
         if label is None: label = name
+        if not isinstance(value, list) and (value is not None): value = [value]
+        if value is None: value = list()
         self.label = label
         self.name = name
         self.options = options
         self.required = required
         self.value = value
-        if not isinstance(value, list) and (value is not None): value = [value]
         self.allowMultiple = allowMultiple
 
     def parseResponse(self, response):
