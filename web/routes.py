@@ -68,6 +68,7 @@ def testSchemaGeneration():
 # Manufacturer Routes #
 #######################
 
+
 # Create A Manufacturer
 @app.route("/manufacturer/create", methods=["GET", "POST"])
 def createManufacturer():
@@ -119,6 +120,7 @@ def editManufacturer(objID):
         return editManufacturerForm.render()
     else:
         return "Invalid Method! This endpoint only supports GET & POST"
+
 
 # View A Specific Manufacturer
 # Not worthy of comment.

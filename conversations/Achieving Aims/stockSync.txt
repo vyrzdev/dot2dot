@@ -1,0 +1,56 @@
+So initially, I was treating a stock change as a object...
+
+But now I'm considering switching to a model where sales are logged and sent out.
+So instead of stockChange we have a sale.
+
+Except, wouldn't a sale just be a subclass of stockChange
+Yes, it would be.
+
+Okay, so we are sticking with stockChange model.
+
+Listeners will poll their respective services, creating new stockChange objects when a change comes in from their service.
+Check if changes are new using their platforms orderID or equivalent.
+
+When a change comes in...
+Do we send a JSON Post to the webserver?
+Or do we have a cron on the webserver end grab all the unprocessed changes and handle them...
+
+The JSON POST option creates some confusion later, especially given that all it will do is create db object.
+
+We are going to have to use a cron... but instead of it being a race condition, why dont we do something like this:
+
+while ###:
+    query all unprocessed changes
+    order in order of time created <- This fixes any accidental fuckery
+    for unprocessed change:
+        process
+    sleep(arbitrary number to prevent wasted cpu cycles)
+
+This way no race condition happens!
+
+Ok lets nail down the model for a stockChange:
+
+{
+    id:
+    state: (unapplied, appliedLocally, appliedGlobally)
+    order ID on origin platform:
+    originPlatform:
+    quantity:
+    action: (set, add, subtract)
+    targetProductID on platform: <-- This prevents wasting cycles on querying the product object from platform.
+}
+
+What do we do when we dont have a databased product for that platform id?
+We need to do a full index of that platform.
+Pass over this change, but dont mark it processed.
+
+If we do, apply the quantity change to our version of the product,
+mark it appliedLocally
+
+After its applied locally, it will be picked up by a query which sends it back out to services aside from origin.
+
+Overall we have these simultaneous operations:
+
+--Service Listeners--
+--local change applier--
+--global change applier--

@@ -1,0 +1,12 @@
+This ones gonna be quite simple.
+
+For services like Etsy we can format a lot of data into a standard description
+For square we can drop almost all of the detailed product data
+For WooCommerce however... we need to be able to create custom fields through an API Call...
+
+Leaving that complication aside for now...
+
+We will make API changes when a product is edited...
+As well as nightly consistency checks.
+
+These consistency checks could become costly... Ignore that for now.

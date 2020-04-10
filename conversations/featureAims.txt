@@ -1,0 +1,11 @@
+Okay, lets break down this softwares purpose and potential features.
+
+
+Core:
+    - Stores Product Data
+    - Synchronizes Stock Values Across Multiple Services.
+    - Synchronizes Product Data Across Multiple Services.
+
+Extra:
+    - Analytics/Data Collection from all services.
+

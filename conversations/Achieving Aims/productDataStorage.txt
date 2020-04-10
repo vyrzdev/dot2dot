@@ -1,0 +1,19 @@
+We need to store product data.
+
+We will store it in a structure of:
+
+{
+    id
+    name
+    sku
+    manufacturer
+    category
+    price
+    metaData
+    categoricData
+}
+
+categoricData is a simple dictionary of field IDs and values.
+
+metaData is a dictionary of programmatic information, e.g. Etsy Listing ID
+
