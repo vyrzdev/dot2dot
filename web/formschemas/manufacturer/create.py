@@ -14,8 +14,4 @@ Schema = {
         "label": "Contact Email",
         "required": False
     },
-    "contactInfo__valid": {
-        "type": "boolean",
-        "label": "Is this data valid?",
-    }
 }

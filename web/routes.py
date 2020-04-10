@@ -42,8 +42,8 @@ def createManufacturer():
             # Send them to the new manufacturer page, iterID is the primary key, and is assigned by sequenceField.
             return redirect(f"/manufacturer/view/{newManufacturer.iterID}")
         else:
-            # Fuck off. How tf did you break this shit?
-            return str(jsonResponse)
+            createManufacturerForm.addErrorMessages(jsonResponse["errors"])
+            return createManufacturerForm.render()
     # Send the forms HTML.
     elif request.method == "GET":
         return createManufacturerForm.render()

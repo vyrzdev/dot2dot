@@ -50,6 +50,7 @@ class Field:
 
     def render(self):
         conditional = ""
+        if self.errorMessage is None: self.errorMessage = ""
         if self.value is not None: conditional = f'value="{self.value}"'
         containerClass = "fieldContainer"
         labelClass = "fieldLabel"
@@ -111,7 +112,7 @@ class BooleanField:
 
     def render(self):
         conditional = ""
-        if self.value is not None:
+        if self.value:
             conditional = "checked"
         containerClass = "fieldContainer"
         labelClass = "fieldLabel"
@@ -127,12 +128,14 @@ class BooleanField:
 
 # TODO: Migrate to new value system, still on placeholder.
 class SelectField:
-    def __init__(self, name, options, label=None, required=False, allowMultiple=False):
+    def __init__(self, name, options, label=None, required=False, allowMultiple=False, value=None):
         if label is None: label = name
         self.label = label
         self.name = name
         self.options = options
         self.required = required
+        self.value = value
+        if not isinstance(value, list) and (value is not None): value = [value]
         self.allowMultiple = allowMultiple
 
     def parseResponse(self, response):
@@ -160,7 +163,9 @@ class SelectField:
         optionButtons = str()
         if self.allowMultiple: tag = "multiple"
         for option in self.options:
-            optionButtons = f'{optionButtons}<option class="{optionClass}" value="{option}">{option}</option>'
+            tag2 = ""
+            if option in self.value: tag2 = "selected"
+            optionButtons = f'{optionButtons}<option class="{optionClass}" value="{option}" {tag2}>{option}</option>'
         markup = f'''
             <div class={containerClass}>
                 <label class="{labelClass}">{self.label}</label>

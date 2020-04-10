@@ -1,0 +1,59 @@
+Oh boy here we go again...
+
+Big inconsistency/unknown throughout has been the status of Fields
+Are they JSON? Are they Field Objects? Are they database objects?
+
+Major difference between Field object and the storage of set field.
+Field object is intended for usage, not databasing.
+Do we combine them?
+
+Ok tangenting for a moment...
+
+Field will be built from JSON like this:
+
+get field name
+get field details
+from details get type
+depending on type look for type specific details
+do stuff
+
+
+~~~
+
+Okay, that gave me an idea.
+We don't want to combine them as there is a major difference between a
+field Instance, and a field store.
+
+I suggest we split these two concepts.
+fieldInstance is the actual rendered item.
+
+fieldStore is a blueprint for field
+
+in JSON like this:
+{
+  "name": name,
+  "type": type,
+  "details": {
+    dict of type specific details
+  }
+}
+
+So now that leads naturally to the question of:
+When we database each categories fields, do we store a JSON
+representation of each? or do we store a reference field?
+
+If we store a reference field, we risk bugs.
+The type could be changed, or the field itself could be deleted
+
+However its even worse if we store a static JSON rep.
+
+I suggest we only allow editing of risky values at the creation,
+have a safe delete method for fields that deletes them and their
+data from the database.
+
+Okay so tasks:
+  - Finish form build from schema function.
+  - Write fieldStore model. -> Must have method to generate schema item.
+  - Write delete method -> Must be safe.
+  - Make necessary changes to category model to build in fieldStore.
+  - Modularize fields.py -> Change namings throughout software.

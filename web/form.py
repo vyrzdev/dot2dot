@@ -40,7 +40,7 @@ class Form:
 
     def addErrorMessages(self, errorDict):
         for fieldObject in self.fieldObjects:
-            fieldObject.errorMessage = errorDict.get(fieldObject.name)
+            fieldObject.errorMessage = dict(enumerate(errorDict.get(fieldObject.name))).get(0)
 
     def buildFromSchema(self, Schema):
         self.fieldObjects = []
