@@ -1,12 +1,6 @@
 from flask import Markup
 from . import fields
 
-fieldClassLookup = {
-    "text": fields.Field,
-    "boolean": fields.BooleanField,
-    "select": fields.SelectField
-}
-
 
 class Form:
     def __init__(self, action, method, fields=[]):
@@ -43,14 +37,26 @@ class Form:
             fieldObject.errorMessage = dict(enumerate(errorDict.get(fieldObject.name))).get(0)
 
     def buildFromSchema(self, Schema):
+        fieldClassLookup = {
+            "text": fields.Field,
+            "textarea": fields.TextAreaField,
+            "boolean": fields.BooleanField,
+            "select": fields.SelectField
+        }
         self.fieldObjects = []
         for fieldName in Schema.keys():
             details = Schema.get(fieldName)
-            fieldClass = fieldClassLookup.get(details.get("type"))
-            field = fieldClass(fieldName, label=details.get("label"), required=details.get("required"))
-            self.addField(field)
+            fieldType = details.get("type")
+            fieldClass = fieldClassLookup.get(fieldType)
+            if fieldType in ["text", "textarea"]:
+                field = fieldClass(fieldName, label=details.get("label"), required=details.get("required"))
+            elif fieldType == "boolean":
+                field = fieldClass(fieldName, label=details.get("label"))
+            elif fieldType == "select":
+                field = fieldClass(fieldName, label=details.get("label"), options=details.get("options"), allowMultiple=details.get("allowMultiple"), required=details.get("required"))
+            self.fieldObjects.append(field)
 
-    # On parse, we need to check every input, against its validation method, then we need to log if theres an error, return that, along with the parsed input.
+    # On parse, we need to check every input, against its validation method, then we need to log if there is an error, return that, along with the parsed input.
     # Errors will be passed as dict: {"name": "ErrorMsg"}
     # Response will be passed as JSON.
     # Variable passed into parseResponse is request.form
