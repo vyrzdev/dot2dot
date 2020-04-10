@@ -3,6 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 
+# To be honest, kind of unnecessary.
+# Only an admin user exists.
 class user(mongoengine.Document):
     name = mongoengine.StringField()
     email = mongoengine.EmailField()
@@ -38,33 +40,77 @@ class manufacturer(mongoengine.Document):
 
 
 class category(mongoengine.Document):
-    iterID = mongoengine.SequenceField(primary_key=True)
+    # Category Name ~ Display Name
     name = mongoengine.StringField(required=True)
+    # Category description, simple text block.
     description = mongoengine.StringField()
-    properties = mongoengine.DictField()
-    # ^^^ A dict of all the different properties applicable to this category.
-    # Structure of; name: type
 
+    # Performs a query to find products with this category, for optimization reasons,
+    # the products are not stored in the category document.
     def products(self, **kwargs):
         return product.objects(category=self, **kwargs)
 
+    # Same thing, with fields being resolved by a query to allow for reuse of fields.
+    def fields(self, **kwargs):
+        return fieldStore.objects(category=self, **kwargs)
+
 
 class product(mongoengine.Document):
-    iterID = mongoengine.SequenceField(primary_key=True)
+    # Products Name
     name = mongoengine.StringField(required=True)
+    # Products SKU, generated on the service end.
     sku = mongoengine.StringField(required=True)
+    # Products description, simple block of text.
     description = mongoengine.StringField()
-    productData = mongoengine.DictField()  # A Dict storing productData.
-    metaData = mongoengine.DictField()  # A simple dict storing meta like ETSYListingIDs, etc.
+    # Ooh the juicy bits
+    # Product Data, stored in structure:
+    # FieldStoreID: value
+    # On product data render, field display will be reconstructed from store.
+    productData = mongoengine.DictField()
+    # Meta Data, this will be important information on the product at a service level,
+    # Stuff like EtsyIDs, and other things that we need to store, but dont want to define
+    # a rigid schema for.
+    # Do we structure as a simple 1 layer dictionary?
+    # Or do we organize based on service.
+    # For simplicity we will keep it to 1 layer with descriptive keys.
+    metaData = mongoengine.DictField()
+    # Products price, will be stored in a fancy format to allow for currency changes
+    # Format in JSON:
+    # {
+    #   "amount": 200,
+    #   "currency": "GBP",
+    # }
+    # TODO: Clarify how pricing is done, Etsy has some complications with this given no decimal orders.
+    # Maybe include a boolean in the currency JSON for if sold by unit or by measure?
+    # Or should that be included in the db store.
+    # Include in DB store to make querying easier.
+    # Not done yet ~ Need to actually do.
     price = mongoengine.DictField()
-    quantity = mongoengine.DecimalField(precision=4)
+
+    # We will keep quantity out of the mix for now.
+    # TODO: Decide on how stock will be stored, must be considered alongside stockChange
+    # quantity = mongoengine.DecimalField(precision=4)
 
     # Reference Fields
-    supplier = mongoengine.ReferenceField(manufacturer, required=True)
+    # Store manufacturer and category.
+    manufacturer = mongoengine.ReferenceField(manufacturer, required=True)
     category = mongoengine.ReferenceField(category, required=True)
 
     def stockChanges(self, **kwargs):
         return stockChange.objects(product=self, **kwargs)
+
+
+class fieldStore(mongoengine.Document):
+    name = mongoengine.StringField()
+    type = mongoengine.StringField()
+    details = mongoengine.DictField()
+
+    def Schema(self):
+        build = {self.name: {
+            **{"type": self.type},
+            **self.details,
+        }}
+        return build
 
 
 class stockChange(mongoengine.Document):
