@@ -41,14 +41,15 @@ class Form:
             "text": fields.Field,
             "textarea": fields.TextAreaField,
             "boolean": fields.BooleanField,
-            "select": fields.SelectField
+            "select": fields.SelectField,
+            "list": fields.ListField
         }
         self.fieldObjects = []
         for fieldName in Schema.keys():
             details = Schema.get(fieldName)
             fieldType = details.get("type")
             fieldClass = fieldClassLookup.get(fieldType)
-            if fieldType in ["text", "textarea"]:
+            if fieldType in ["text", "textarea", "list"]:
                 field = fieldClass(fieldName, label=details.get("label"), required=details.get("required"))
             elif fieldType == "boolean":
                 field = fieldClass(fieldName, label=details.get("label"))

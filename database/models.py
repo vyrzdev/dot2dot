@@ -102,8 +102,10 @@ class product(mongoengine.Document):
 
 class fieldStore(mongoengine.Document):
     name = mongoengine.StringField()
-    type = mongoengine.StringField()
+    fieldType = mongoengine.StringField()
     details = mongoengine.DictField()
+    metaData = mongoengine.DictField()  # Corresponding field name in WooCommerce.
+    category = mongoengine.ReferenceField(category)
 
     def Schema(self):
         build = {self.name: {
@@ -114,9 +116,9 @@ class fieldStore(mongoengine.Document):
 
 
 class stockChange(mongoengine.Document):
-    product = mongoengine.ReferenceField(product)
-    stage = mongoengine.StringField(default="fetch")
-    originService = mongoengine.StringField()
-    changeType = mongoengine.StringField()
-    quantity = mongoengine.DecimalField(precision=4)
-    time_created = mongoengine.DateTimeField(default=datetime.utcnow())
+    state = mongoengine.StringField(default="unapplied")
+    originPlatformOrderID = mongoengine.StringField()
+    originPlatformProductID = mongoengine.StringField()
+    originPlatform = mongoengine.StringField()
+    quantity = mongoengine.DecimalField()
+    action = mongoengine.StringField()

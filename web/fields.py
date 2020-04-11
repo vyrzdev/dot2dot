@@ -62,6 +62,18 @@ class Field:
         return Markup(markup)
 
 
+class ListField(Field):
+    def parseResponse(self, response):
+        value, errors = super(ListField, self).parseResponse(response)
+        try:
+            value = value.split(",")
+            value = [i.strip() for i in value]
+        except:
+            value = "error"
+            errors.append("Error occurred! Ensure you format the options in the EXACT way they are shown.")
+        return value, errors
+
+
 # A large text field input.
 class TextAreaField(Field):
     def render(self):

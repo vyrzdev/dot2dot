@@ -1,0 +1,11 @@
+We have a couple options...
+
+We could have a completely seperate resource called fields, and when you add a field, you can then select it from the category...
+Or do we instead have a endpoint like: /category/fields/(create, edit, view)/targetID
+No because then which target is that... the category or the field?
+I suggest an alternative /category/fields/{targetCatID}/(create, edit, view)/{targetFieldID}
+
+
+Perfect!
+
+Fields will be unique to each category.

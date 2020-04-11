@@ -66,3 +66,15 @@ Products will store category specific data in a dict called productData.
 This dict will be structured as such:
 
 fieldID: value
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A day later...
+
+When creating a field, we need to ask for different things after finding out the field type, much like with products and categories.
+We obviously need some kind of standard for this...
+I propose we create a finalization route...
+So after the initial product/field is created, it is taken to a finalization page.
+That finalize page only marks the product as finalized if the response is valid.
+Easy, right?
+

@@ -1,1 +1,1 @@
-from . import manufacturer
+from . import manufacturer, category
