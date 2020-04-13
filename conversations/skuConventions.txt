@@ -16,6 +16,8 @@ Is it better to have SKUs be rigid and not user editable?
 Okay, so we aren't going to let the user skip SKUs.
 So calculating sku workflow looks sort of like this:
 
+
+# Pseudo Code
 get manufacturer
 get products with this manufacturer in order of datetime added ~ Costly Query
 if none:

@@ -41,9 +41,11 @@ class manufacturer(mongoengine.Document):
 
 class category(mongoengine.Document):
     # Category Name ~ Display Name
-    name = mongoengine.StringField(required=True)
+    name = mongoengine.StringField()
     # Category description, simple text block.
     description = mongoengine.StringField()
+
+    metaData = mongoengine.DictField()
 
     # Performs a query to find products with this category, for optimization reasons,
     # the products are not stored in the category document.

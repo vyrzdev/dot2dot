@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b027b1f9-f943-4b1b-ab46-17eb1cfa43a6" name="Default Changelist" comment="Commented and modified models, brought it up to date with the rest of the codes structure, added a fieldStore document...&#10;&#10;Added a Schema method for the fieldStore doc, can now generate a schema from itself.">
+      <change afterPath="$PROJECT_DIR$/conversations/viewSchemas.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/schemas/category/fields/edit.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/schemas/manufacturer/view.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/schemas/schemas.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/templates/view" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conversations/skuConventions.txt" beforeDir="false" afterPath="$PROJECT_DIR$/conversations/skuConventions.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/form.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/form.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/schemas/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/category/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/schemas/category/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/category/create.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/schemas/category/create.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/category/edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/schemas/category/edit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/category/fields/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/schemas/category/fields/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/category/fields/create.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/schemas/category/fields/create.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/category/fields/edit.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/manufacturer/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/schemas/manufacturer/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/manufacturer/create.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/schemas/manufacturer/create.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/formschemas/manufacturer/edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/schemas/manufacturer/edit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/routes.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1aLlVfeKoLYumtQwFUjGnsJwdNE" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DatabaseDriversLRU" value="mongo" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
+    <property name="full.screen.before.presentation.mode" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="dot2dot" is-module-sdk="true" working-directory="$PROJECT_DIR$/..">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="dot2dot" />
+        <option name="myWorkingDirectory" value="$PROJECT_DIR$/.." />
+      </console-settings>
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Ben\Projects\dot2dot\web\formschemas\category\fields" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.scratch">
+    <configuration name="Unnamed" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="dot2dot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Ben\AppData\Local\Programs\Python\Python38-32\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="dot2dot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.Unnamed" />
+      <item itemvalue="Python.scratch" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.scratch" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b027b1f9-f943-4b1b-ab46-17eb1cfa43a6" name="Default Changelist" comment="" />
+      <created>1586522779827</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586522779827</updated>
+      <workItem from="1586522786733" duration="3225000" />
+      <workItem from="1586529269867" duration="265000" />
+      <workItem from="1586529558580" duration="5536000" />
+      <workItem from="1586602164576" duration="8109000" />
+      <workItem from="1586615791812" duration="17806000" />
+    </task>
+    <task id="LOCAL-00001" summary="Brought almost all the fields up to date">
+      <created>1586525717468</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1586525717468</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Made some more decisions about fields">
+      <created>1586525737301</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1586525737301</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Moved fieldClassLookup into the buildFromSchema method.&#10;Overhauled buildFromSchema to support different types.">
+      <created>1586525784350</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1586525784350</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Started testing the next phase, building a schema dynamically from fieldStore obj">
+      <created>1586525810283</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1586525810283</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Commented and modified models, brought it up to date with the rest of the codes structure, added a fieldStore document...&#10;&#10;Added a Schema method for the fieldStore doc, can now generate a schema from itself.">
+      <created>1586525873871</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1586525873871</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Conversed with myself.&#10;Added pycharm configs.&#10;Fixed pep errors in routes.py">
+      <created>1586532351153</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1586532351153</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Made some changes, expanded the creating categories, and creating fields system.&#10;&#10;Came up with a standard for multiple stage forms.">
+      <created>1586611110499</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1586611110499</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Brought almost all the fields up to date" />
+    <MESSAGE value="Made some more decisions about fields" />
+    <MESSAGE value="Moved fieldClassLookup into the buildFromSchema method.&#10;Overhauled buildFromSchema to support different types." />
+    <MESSAGE value="Started testing the next phase, building a schema dynamically from fieldStore obj" />
+    <MESSAGE value="Commented and modified models, brought it up to date with the rest of the codes structure, added a fieldStore document...&#10;&#10;Added a Schema method for the fieldStore doc, can now generate a schema from itself." />
+    <MESSAGE value="Conversed with myself.&#10;Added pycharm configs.&#10;Fixed pep errors in routes.py" />
+    <MESSAGE value="Made some changes, expanded the creating categories, and creating fields system.&#10;&#10;Came up with a standard for multiple stage forms." />
+    <option name="LAST_COMMIT_MESSAGE" value="Made some changes, expanded the creating categories, and creating fields system.&#10;&#10;Came up with a standard for multiple stage forms." />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="384" y="89" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586693958213">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state x="384" y="89" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1473.864@0.0.1473.864" timestamp="1586693958213" />
+    <state x="500" y="235" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1586622639191">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state x="500" y="235" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1473.864@0.0.1473.864" timestamp="1586622639191" />
+    <state x="516" y="187" key="FileChooserDialogImpl" timestamp="1586523901141">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state x="516" y="187" key="FileChooserDialogImpl/0.0.1473.864@0.0.1473.864" timestamp="1586523901141" />
+    <state width="1432" height="262" key="GridCell.Tab.0.bottom" timestamp="1586696828900">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state width="1432" height="262" key="GridCell.Tab.0.bottom/0.0.1473.864@0.0.1473.864" timestamp="1586696828900" />
+    <state width="1432" height="262" key="GridCell.Tab.0.center" timestamp="1586696828900">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state width="1432" height="262" key="GridCell.Tab.0.center/0.0.1473.864@0.0.1473.864" timestamp="1586696828900" />
+    <state width="1432" height="262" key="GridCell.Tab.0.left" timestamp="1586696828900">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state width="1432" height="262" key="GridCell.Tab.0.left/0.0.1473.864@0.0.1473.864" timestamp="1586696828900" />
+    <state width="1432" height="262" key="GridCell.Tab.0.right" timestamp="1586696828900">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state width="1432" height="262" key="GridCell.Tab.0.right/0.0.1473.864@0.0.1473.864" timestamp="1586696828900" />
+    <state width="189" height="457" key="HiddenNamespacesPopup" timestamp="1586525942115">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state width="189" height="457" key="HiddenNamespacesPopup/0.0.1473.864@0.0.1473.864" timestamp="1586525942115" />
+    <state x="245" y="77" key="SettingsEditor" timestamp="1586785272820">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state x="245" y="77" key="SettingsEditor/0.0.1473.864@0.0.1473.864" timestamp="1586785272820" />
+    <state width="498" height="446" key="SwitcherDM" timestamp="1586785209482">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state width="498" height="446" key="SwitcherDM/0.0.1473.864@0.0.1473.864" timestamp="1586785209482" />
+    <state x="329" y="165" key="Vcs.Push.Dialog.v2" timestamp="1586611119004">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state x="329" y="165" key="Vcs.Push.Dialog.v2/0.0.1473.864@0.0.1473.864" timestamp="1586611119004" />
+    <state x="516" y="276" key="cloudConfig.PluginsDialog" timestamp="1586523371105">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state x="516" y="276" key="cloudConfig.PluginsDialog/0.0.1473.864@0.0.1473.864" timestamp="1586523371105" />
+    <state x="609" y="276" key="cloudConfig.SelfSettingsDialog" timestamp="1586523367345">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state x="609" y="276" key="cloudConfig.SelfSettingsDialog/0.0.1473.864@0.0.1473.864" timestamp="1586523367345" />
+    <state x="547" y="346" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586611175637">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state x="547" y="346" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1473.864@0.0.1473.864" timestamp="1586611175637" />
+    <state x="399" y="181" width="672" height="678" key="search.everywhere.popup" timestamp="1586696152231">
+      <screen x="0" y="0" width="1473" height="864" />
+    </state>
+    <state x="399" y="181" width="672" height="678" key="search.everywhere.popup/0.0.1473.864@0.0.1473.864" timestamp="1586696152231" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/web/routes.py</url>
+          <line>170</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/web/routes.py</url>
+          <line>237</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/dot2dot$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1586693986808" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
+    <SUITE FILE_PATH="coverage/dot2dot$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1586693975772" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+</project>

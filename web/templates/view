@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>{{ resource }} - {{ action }}</title>
+    </head>
+    <body>
+        <h1>{{ resource }} - {{ action }}</h1>
+        <table>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Actions
+                </th>
+            <tr>
+            {% for result in results %}
+            <tr>
+                <td>{{ result.name }}</td>
+                <td>
+                    <a href="/{{ resource }}/edit/{{ result.id }}">Edit</a>
+                    <a href="/{{ resource }}/view/{{ result.id }}">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <br>
+        <a href="/{{ resource }}/view?page={{ (currentPage - 1) }}">Last Page</a>
+        <p>Current Page: {{ currentPage }}</p>
+        <a href="/{{ resource }}/view?page={{ (currentPage + 1) }}">Next Page</a>
+    </body>
+</html>

@@ -45,16 +45,16 @@ class Form:
             "list": fields.ListField
         }
         self.fieldObjects = []
-        for fieldName in Schema.keys():
-            details = Schema.get(fieldName)
-            fieldType = details.get("type")
+        for field in Schema:
+            fieldName = field.get("name")
+            fieldType = field.get("type")
             fieldClass = fieldClassLookup.get(fieldType)
             if fieldType in ["text", "textarea", "list"]:
-                field = fieldClass(fieldName, label=details.get("label"), required=details.get("required"))
+                field = fieldClass(fieldName, label=field.get("label"), required=field.get("required"))
             elif fieldType == "boolean":
-                field = fieldClass(fieldName, label=details.get("label"))
+                field = fieldClass(fieldName, label=field.get("label"))
             elif fieldType == "select":
-                field = fieldClass(fieldName, label=details.get("label"), options=details.get("options"), allowMultiple=details.get("allowMultiple"), required=details.get("required"))
+                field = fieldClass(fieldName, label=field.get("label"), options=field.get("options"), allowMultiple=field.get("allowMultiple"), required=field.get("required"))
             self.fieldObjects.append(field)
 
     # On parse, we need to check every input, against its validation method, then we need to log if there is an error, return that, along with the parsed input.

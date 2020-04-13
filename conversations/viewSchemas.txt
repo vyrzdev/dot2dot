@@ -1,0 +1,40 @@
+For each view page we need to support custom actions, custom product actions... and more...
+
+I suggest a schema structure of:
+{
+    "resourceDetails": {
+        "name": "manufacturer",
+        "title": "Manufacturer",
+        "endpoint": "/manufacturer"
+    },
+    "resourceActions": [
+        {
+            "name": "create",
+            "title": "Create",
+            "endpoint": "/create",
+        },
+        {
+            "name": "drop",
+            "title": "Drop Collection",
+            "endpoint": "/drop"
+        },
+    ],
+    "resultActions": [
+        {
+            "name": "edit",
+            "title": "Edit",
+            "endpoint": "/edit/<objID>",
+        },
+        {
+            "name": "fields",
+            "title": "View Fields",
+            "endpoint": "/fields/<objID>/view"
+        }
+    ],
+    "displayedFields": [
+        {
+            "label": "Name",
+            "name": "name",
+        }
+    ]
+}
