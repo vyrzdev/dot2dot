@@ -1,1 +1,1 @@
-from . import manufacturer, category, schemas
+from . import manufacturer, category, resourceSchemas

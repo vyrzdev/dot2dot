@@ -119,8 +119,12 @@ class fieldStore(mongoengine.Document):
 
 class stockChange(mongoengine.Document):
     state = mongoengine.StringField(default="unapplied")
+    time_occurred = mongoengine.DateTimeField(default=datetime.now)
+
+    originPlatform = mongoengine.StringField()
     originPlatformOrderID = mongoengine.StringField()
     originPlatformProductID = mongoengine.StringField()
-    originPlatform = mongoengine.StringField()
+
     quantity = mongoengine.DecimalField()
-    action = mongoengine.StringField()
+    action = mongoengine.StringField() # add, subtract, set
+    product = mongoengine.ReferenceField(product)

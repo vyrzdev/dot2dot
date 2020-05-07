@@ -1,9 +1,9 @@
 <html>
     <head>
-        <title>{{ resource }} - {{ action }}</title>
+        <title>{{ schema.get("meta").get("label") }} - {{ action }}</title>
     </head>
     <body>
-        <h1>{{ resource }} - {{ action }}</h1>
+        <h1>{{ schema.get("meta").get("label") }} - {{ action }}</h1>
         <table>
             <tr>
                 <th>
@@ -17,16 +17,16 @@
             <tr>
                 <td>{{ result.name }}</td>
                 <td>
-                    <a href="/{{ resource }}/edit/{{ result.id }}">Edit</a>
-                    <a href="/{{ resource }}/view/{{ result.id }}">View</a>
+                    <a href="{{ schema.get("meta").get("endpoint") }}/edit?target={{ result.id }}">Edit</a>
+                    <a href="{{ schema.get("meta").get("endpoint") }}/view?target={{ result.id }}">View</a>
                 </td>
             </tr>
             {% endfor %}
         </table>
         <br>
         <br>
-        <a href="/{{ resource }}/view?page={{ (currentPage - 1) }}">Last Page</a>
+        <a href="{{ schema.get("meta").get("endpoint") }}/view?page={{ (currentPage - 1) }}">Last Page</a>
         <p>Current Page: {{ currentPage }}</p>
-        <a href="/{{ resource }}/view?page={{ (currentPage + 1) }}">Next Page</a>
+        <a href="{{ schema.get("meta").get("endpoint") }}/view?page={{ (currentPage + 1) }}">Next Page</a>
     </body>
 </html>

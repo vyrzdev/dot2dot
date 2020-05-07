@@ -1,11 +1,12 @@
 from . import app, models, form, schemas
 from flask import request, jsonify, redirect, abort, render_template
 
-
 from flask.json import JSONEncoder
 from bson import json_util
 from mongoengine.base import BaseDocument
 from mongoengine.queryset.base import BaseQuerySet
+
+# APISchemas = schemas.apis.Schemas
 
 
 class MongoEngineJSONEncoder(JSONEncoder):
@@ -23,8 +24,9 @@ def paginate(resource, items_per_page=10, page_number=1):
     paginatedResults = resource.objects.skip(offset).limit(items_per_page)
     return paginatedResults
 
-def getFieldValue(object, fieldName):
-    objectDict = object.to_mongo().to_dict()
+
+def getFieldValue(fieldObject, fieldName):
+    objectDict = fieldObject.to_mongo().to_dict()
     if "__" in fieldName:
         path = fieldName.split("__")
         current = objectDict
@@ -86,7 +88,7 @@ def testSchemaGeneration():
                                                                                "allowMultiple": False
                                                                                }
                                    )
-                ]
+                 ]
     Schema = {}
     for fieldStore in fieldList:
         Schema = {**Schema, **fieldStore.Schema()}
@@ -148,6 +150,7 @@ def testMultiStepFormStep2(foo):
     else:
         return step2.render()
 
+
 #######################
 # Manufacturer Routes #
 #######################
@@ -160,7 +163,7 @@ def viewManufacturers():
     if currentPage is None: currentPage = 1
     try:
         currentPage = int(currentPage)
-    except:
+    except ValueError:
         return "Invalid Page Number!"
     pageResults = paginate(models.manufacturer, page_number=currentPage)
     return render_template("view", currentPage=currentPage, resource="manufacturer", action="view", results=pageResults)
@@ -233,65 +236,154 @@ def viewManufacturer(objID):
 ###################
 # Category Routes #
 ###################
+@app.route("/category")
+def categoryRedirect():
+    return redirect("/category/view")
 
-#@app.route("/category/create", methods=["GET", "POST"])
-def createCategory():
-    createCategoryForm = form.Form("/category/create", "post")
-    createCategoryForm.buildFromSchema(schemas.category.create.Schema)
-    if request.method == "POST":
-        # Get the form data
-        response = request.form
-        jsonResponse = createCategoryForm.parseResponse(response)
-        # Get a JSON response. As defined in form.py.
-        if jsonResponse["valid"]:
-            newCategory = models.category(**jsonResponse["values"])
-            newCategory.save()
-            # Send them to the new manufacturer page, iterID is the primary key, and is assigned by sequenceField.
-            return redirect(f"/category/view/{newCategory.id}")
+
+@app.route("/category/<action>", methods=["GET", "POST"])
+def categoryRoute(action):
+    resourceSchema = schemas.resourceSchemas.Schema.get("category")
+    if resourceSchema is None:
+        return "Oops! This resources schema appears not to exist!"
+    for actionJSON in resourceSchema.get("actions"):
+        if action == actionJSON.get("name"):
+            if actionJSON.get("function") == "create":
+                # Get the current stage from GET parameters.
+                stage = request.args.get("stage")
+                # If the parameter is not specified, stage must be 1.
+                if stage is None: stage = 1
+                # Try and convert stage to an integer...
+                # It must be possible otherwise it is invalid
+                try:
+                    stage = int(stage)
+                except ValueError:
+                    return "Invalid Stage Number!"
+                if stage > actionJSON.get("stages"):
+                    return "Invalid Stage Number!"
+                if request.method == "GET":
+                    if stage == 1:
+                        createForm = form.Form("/category/create?stage=1", "post")
+                        Schema = resourceSchema.get("stages").get(1).get("fields")
+                        createForm.buildFromSchema(Schema)
+                        return createForm.render()
+                    else:
+                        targetObjectID = request.args.get("target")
+                        if targetObjectID is None: abort(404)
+                        targetObject = resourceSchema.get("meta").get("dbModel").objects(id=targetObjectID).first()
+                        if targetObject is None: abort(404)
+
+                        createForm = form.Form(f"/category/create?stage={stage}&target={targetObjectID}", "post")
+                        dependentFieldName = resourceSchema.get("stages").get(stage).get("dependent_field")
+                        if dependentFieldName is None:
+                            Schema = resourceSchema.get("stages").get(stage).get("fields")
+                        else:
+                            Schema = list()
+                        dependentValue = getFieldValue(targetObject, dependentFieldName)
+                        for field in resourceSchema.get("stages").get(stage).get("fields"):
+                            if field.get("dependent") == dependentValue:
+                                Schema.append(field)
+                            else:
+                                pass
+                        createForm.buildFromSchema(Schema)
+                        return createForm.render()
+
+                else:
+                    if stage == 1:
+                        createForm = form.Form("/category/create?stage=1", "post")
+                        Schema = resourceSchema.get("stages").get(1).get("fields")
+                        createForm.buildFromSchema(Schema)
+                        jsonResponse = createForm.parseResponse(request.form)
+                        targetObject = resourceSchema.get("meta").get("dbModel")()
+                    else:
+                        targetObjectID = request.args.get("target")
+                        if targetObjectID is None: abort(404)
+                        targetObject = resourceSchema.get("meta").get("dbModel").objects(id=targetObjectID).first()
+                        if targetObject is None: abort(404)
+
+                        createForm = form.Form(f"/category/create?stage={stage}&target={targetObjectID}", "post")
+                        dependentFieldName = resourceSchema.get("stages").get(stage).get("dependent_field")
+                        if dependentFieldName is None:
+                            Schema = resourceSchema.get("stages").get(stage).get("fields")
+                        else:
+                            Schema = list()
+                            dependentValue = getFieldValue(targetObject, dependentFieldName)
+                            for field in resourceSchema.get("stages").get(stage).get("fields"):
+                                if field.get("dependent") == dependentValue:
+                                    Schema.append(field)
+                                else:
+                                    pass
+                        createForm.buildFromSchema(Schema)
+                        jsonResponse = createForm.parseResponse(request.form)
+
+                    if jsonResponse.get("valid"):
+                        targetObject.save()
+
+                        if stage == actionJSON.get("stages"):
+                            jsonResponse["values"] = {**jsonResponse.get("values"), "metaData__finalized": True}
+                            redirectURL = f"/category/view?target={targetObject.id}"
+                        else:
+                            jsonResponse["values"] = {**jsonResponse.get("values"), "metaData__finalized": False}
+                            redirectURL = f"/category/create?stage={stage + 1}&target={targetObject.id}"
+
+                        targetObject.update(**jsonResponse.get("values"))
+                        return redirect(redirectURL)
+                    else:
+                        createForm.addErrorMessages(jsonResponse.get("errors"))
+                        return createForm.render()
+
+            elif actionJSON.get("function") == "edit":
+                targetObjectID = request.args.get("target")
+                if targetObjectID is None: abort(404)
+                targetObject = resourceSchema.get("meta").get("dbModel").objects(id=targetObjectID).first()
+                if targetObject is None: abort(404)
+
+                editForm = form.Form(f"/category/edit?target={targetObjectID}", "post")
+                Schema = list()
+                for stage in resourceSchema.get("stages").values():
+                    for field in stage.get("fields"):
+                        if field.get("protected"):
+                            pass
+                        else:
+                            Schema.append(field)
+                editForm.buildFromSchema(Schema)
+                editForm.addDefaultValues(targetObject)
+
+                if request.method == "GET":
+                    return editForm.render()
+                else:
+                    jsonResponse = editForm.parseResponse(request.form)
+
+                    if jsonResponse.get("valid"):
+                        targetObject.update(**jsonResponse.get("values"))
+                        return redirect(f"/category/view?{targetObjectID}")
+                    else:
+                        editForm.addErrorMessages(jsonResponse.get("errors"))
+                        return editForm.render()
+
+            elif actionJSON.get("function") == "view":
+                # Get the target object ID, if it doesnt exist, obviously view all items.
+                targetObjectID = request.args.get("target")
+                if targetObjectID is None:
+                    currentPage = request.args.get("page")
+                    if currentPage is None: currentPage = 1
+                    try:
+                        currentPage = int(currentPage)
+                    except ValueError:
+                        return "Invalid Page Number!"
+                    pageResults = paginate(resourceSchema.get("meta").get("dbModel"), page_number=currentPage)
+                    return render_template("view", schema=resourceSchema, results=pageResults, currentPage=currentPage, action="view")
+                else:
+                    # Query target
+                    targetObject = resourceSchema.get("meta").get("dbModel").objects(id=targetObjectID).first()
+                    if targetObject is None:
+                        abort(404)
+                    else:
+                        return MongoEngineJSONEncoder().encode(targetObject)
         else:
-            createCategoryForm.addErrorMessages(jsonResponse["errors"])
-            return createCategoryForm.render()
-        # Send the forms HTML.
-    else:
-        return createCategoryForm.render()
+            pass
 
-
-@app.route("/category/edit/<objID>", methods=["GET", "POST"])
-def editCategory(objID):
-    # Fetch Manufacturer Object, See if it exists.
-    requestedCategory = models.category.objects(id=objID).first()
-    if requestedCategory is None:
-        abort(404)
-
-    editCategoryForm = form.Form(f"/manufacturer/edit/{objID}", "post")
-    editCategoryForm.buildFromSchema(schemas.category.edit.Schema)
-    editCategoryForm.addDefaultValues(requestedCategory)
-
-    if request.method == "POST":
-        # Get the form data
-        response = request.form
-        jsonResponse = editCategoryForm.parseResponse(response)
-        # Get a JSON response. As defined in form.py.
-        if jsonResponse["valid"]:
-            requestedCategory.update(**jsonResponse["values"])
-            # Send them to the new manufacturer page, iterID is the primary key, and is assigned by sequenceField.
-            return redirect(f"/category/view/{requestedCategory.id}")
-        else:
-            editCategoryForm.addErrorMessages(jsonResponse["errors"])
-            return editCategoryForm.render()
-        # Send the forms HTML.
-    else:
-        return editCategoryForm.render()
-
-
-@app.route("/category/view/<objID>")
-def viewCategory(objID):
-    requestedCategory = models.category.objects(id=objID).first()
-    print(requestedCategory)
-    if requestedCategory is None:
-        abort(404)
-    else:
-        return MongoEngineJSONEncoder().encode(requestedCategory)
+    return "Oops! Invalid Action!"
 
 
 #########################
@@ -322,13 +414,11 @@ def createCategoryField(objID):
 
 @app.route("/category/fields/<catID>/finalize/<fieldID>", methods=["GET", "POST"])
 def finalizeCategoryField(catID, fieldID):
-    requestedCategory = None  # Potentially may be used at a later date.
     requestedField = models.fieldStore.objects(id=fieldID).first()
     if requestedField is None:
         abort(404)
     elif requestedField.metaData.get("finalized"):
         return "Product already finalized!"
-    # TODO: Finish this method according two stage policy...
     Schema = schemas.category.fields.create.FinalizeSchemas.get(requestedField.fieldType)
     finalizeCategoryFieldForm = form.Form(f"/category/fields/{catID}/finalize/{fieldID}", "post")
     finalizeCategoryFieldForm.buildFromSchema(Schema)
@@ -348,7 +438,6 @@ def finalizeCategoryField(catID, fieldID):
 
 @app.route("/category/fields/<catID>/edit/<fieldID>", methods=["GET", "POST"])
 def editCategoryField(catID, fieldID):
-    requestedCategory = None  # Potentially may be used at a later date.
     requestedField = models.fieldStore.objects(id=fieldID).first()
     if requestedField is None:
         abort(404)
@@ -376,136 +465,4 @@ def editCategoryField(catID, fieldID):
 # 404 Error
 @app.errorhandler(404)
 def Four_0_Four(error):
-    return "Error! 404 Page not found... Ths page/feature either doesn't exist yet or at all."
-
-
-@app.route("/<resource>")
-def redirectToView(resource):
-    # Redirect to the view list page.
-    return redirect(f"/{resource}/view")
-
-
-@app.route("/<resource>/<action>", methods=["GET", "POST"])
-def bigBuildFunc(resource, action):
-    # Get the schema for this resource
-    resourceSchema = schemas.schemas.Schema.get(resource)
-    if resourceSchema is None:
-        # If there is no schema, the resource doesn't exist!
-        abort(404)
-    # Get a list of allowed actions for this endpoint.
-    for actionJSON in resourceSchema.get("actions"):
-        # If this action is the one requested do:
-        if actionJSON.get("name") == action:
-            # Seperating the action endpoint from the function applied...
-            # If the action has function of create do:
-            if actionJSON.get("function") == "create":
-                # TODO: Fix stage logic.
-                # TODO: MetaData store current stage, etc.
-                # Get the current stage from GET parameters.
-                stage = request.args.get("stage")
-                # If the parameter is not specified, stage must be 1.
-                if stage is None: stage = 1
-                # Try and convert stage to an integer...
-                # It must be possible otherwise it is invalid
-                try:
-                    stage = int(stage)
-                except ValueError:
-                    return "Invalid Stage Number!"
-                if stage > actionJSON.get("stages"):
-                    return "Invalid Stage Number!"
-
-                if request.method == "GET":
-                    if stage == 1:
-                        createForm = form.Form(f"/{resource}/create?stage=1", "post")
-                        Schema = resourceSchema.get("stages").get(1).get("fields")
-                        createForm.buildFromSchema(Schema)
-                        return createForm.render()
-                    else:
-                        targetObjectID = request.args.get("target")
-                        if targetObjectID is None: abort(404)
-                        targetObject = resourceSchema.get("meta").get("dbModel").objects(id=targetObjectID).first()
-                        if targetObject is None: abort(404)
-
-                        createForm = form.Form(f"/{resource}/create?stage={stage}&target={targetObjectID}", "post")
-                        dependentFieldName = resourceSchema.get("stages").get(stage).get("dependent_field")
-                        if dependentFieldName is None:
-                            Schema = resourceSchema.get("stages").get(stage).get("fields")
-                        else:
-                            Schema = list()
-                            dependentValue = getFieldValue(targetObject, dependentFieldName)
-                            for field in resourceSchema.get("stages").get(stage).get("fields"):
-                                if field.get("dependent") == dependentValue:
-                                    Schema.append(field)
-                                else:
-                                    pass
-                        createForm.buildFromSchema(Schema)
-                        return createForm.render()
-
-                elif request.method == "POST":
-                    if stage == 1:
-                        createForm = form.Form(f"/{resource}/create?stage=1", "post")
-                        Schema = resourceSchema.get("stages").get(1).get("fields")
-                        createForm.buildFromSchema(Schema)
-                        jsonResponse = createForm.parseResponse(request.form)
-                        targetObject = resourceSchema.get("meta").get("dbModel")()
-                    else:
-                        targetObjectID = request.args.get("target")
-                        if targetObjectID is None: abort(404)
-                        targetObject = resourceSchema.get("meta").get("dbModel").objects(id=targetObjectID).first()
-                        if targetObject is None: abort(404)
-
-                        createForm = form.Form(f"/{resource}/create?stage={stage}&target={targetObjectID}", "post")
-                        dependentFieldName = resourceSchema.get("stages").get(stage).get("dependent_field")
-                        if dependentFieldName is None:
-                            Schema = resourceSchema.get("stages").get(stage).get("fields")
-                        else:
-                            Schema = list()
-                            dependentValue = getFieldValue(targetObject, dependentFieldName)
-                            for field in resourceSchema.get("stages").get(stage).get("fields"):
-                                if field.get("dependent") == dependentValue:
-                                    Schema.append(field)
-                                else:
-                                    pass
-                        createForm.buildFromSchema(Schema)
-                        jsonResponse = createForm.parseResponse(request.form)
-
-                    if jsonResponse.get("valid"):
-                        targetObject.save()
-                        if stage == actionJSON.get("stages"):
-                            jsonResponse["values"] = {**jsonResponse.get("values"), "metaData__finalized": True}
-                            redirectURL = f"/{resource}/view?target={targetObject.id}"
-                        else:
-                            jsonResponse["values"] = {**jsonResponse.get("values"), "metaData__finalized": False}
-                            redirectURL = f"/{resource}/create?stage={stage+1}&target={targetObject.id}"
-
-                        targetObject.update(**jsonResponse.get("values"))
-                        return redirect(redirectURL)
-                    else:
-                        createForm.addErrorMessages(jsonResponse.get("errors"))
-                        createForm.render()
-
-            elif actionJSON.get("function") == "edit":
-                pass
-
-            elif actionJSON.get("function") == "view":
-                # Get the target object ID, if it doesnt exist, obviously view all items.
-                targetObjectID = request.args.get("target")
-                if targetObjectID is None:
-                    currentPage = request.args.get("page")
-                    if currentPage is None: currentPage = 1
-                    try:
-                        currentPage = int(currentPage)
-                    except ValueError:
-                        return "Invalid Page Number!"
-                    pageResults = paginate(resourceSchema.get("meta").get("dbModel"), page_number=currentPage)
-                    return render_template("actions/overview", schema=resourceSchema, results=pageResults, currentPage=currentPage)
-                else:
-                    # Query target
-                    targetObject = resourceSchema.get("meta").get("dbModel").objects(id=targetObjectID).first()
-                    if targetObject is None:
-                        abort(404)
-                    else:
-                        return MongoEngineJSONEncoder().encode(targetObject)
-        else:
-            pass
-    abort(404)
+    return f"Error! 404 Page not found... Ths page/feature either doesn't exist yet or at all.\n {error}"
